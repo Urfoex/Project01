@@ -1,9 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-class SDL_window;
-class SDL_render;
-
 class Window{
 	public:
 		Window();
@@ -12,8 +9,11 @@ class Window{
 		void init();
 	protected:
 	private:
-        SDL_window *m_window = nullptr;
-		SDL_render *m_render = nullptr;
+        class SDL_Window *m_window = nullptr;
+		class SDL_Renderer *m_renderer = nullptr;
+		const char *m_title = "Project01";
+		const int m_windowWidth = 1024;
+		const int m_windowHeight = 768;
 
 };
 
