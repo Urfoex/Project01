@@ -3,8 +3,12 @@
 
 int main(){
 	Window window;
-	window.init();
-	window.run();
+	try{
+		window.init();
+		window.run();
+	}catch(std::string s){
+		std::cerr << "Exception: " << s << std::endl;
+	}
 
 	return 0;
 }
