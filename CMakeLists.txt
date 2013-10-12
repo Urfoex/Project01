@@ -1,3 +1,8 @@
+# For clang complete:
+# CXX="~/.vim/bundle/clang_complete/bin/cc_args.py g++" cmake ..
+# and/or
+# cmake-gui -> cmake export compile commands
+
 project(Project01)
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8)
 

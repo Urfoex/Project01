@@ -1,4 +1,7 @@
 syntax:glob
 build/
+build-make/
+compile_commands.json
+.syntastic_cpp_config
 *swp
 

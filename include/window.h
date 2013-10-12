@@ -7,6 +7,8 @@ class SDL_render;
 class Window{
 	public:
 		Window();
+		~Window();
+
 		void init();
 	protected:
 	private:
