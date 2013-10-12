@@ -1,12 +1,10 @@
 #include <iostream>
-#include <SDL.h>
+#include "window.h"
 
 int main(){
-	if( SDL_Init(SDL_INIT_EVERYTHING) != 0){
-		return -1;
-	}
-
-	SDL_Quit();
+	Window window;
+	window.init();
+	window.run();
 
 	return 0;
 }
