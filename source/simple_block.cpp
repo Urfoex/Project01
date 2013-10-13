@@ -6,7 +6,7 @@ void SimpleBlock::update(uint32_t lastDuration){
 }
 
 void SimpleBlock::draw(struct SDL_Renderer *renderer){
-	std::clog << "Drawing\n";
+	// TODO Create and use a texture.
 	uint8_t rgba[4];
 	SDL_GetRenderDrawColor(renderer, &rgba[0], &rgba[1], &rgba[2], &rgba[3]);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);

@@ -12,6 +12,7 @@ class Game{
 		void draw(struct SDL_Renderer *renderer);
 	protected:
 	private:
+		std::shared_ptr<class Physics> m_physics = nullptr;
 		std::vector<std::shared_ptr<class Entity>> m_entities;
 
 };
