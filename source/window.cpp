@@ -8,10 +8,6 @@ Window::Window() {
 }
 
 Window::~Window(){
-	if( m_fpsCounterTexture != nullptr){
-		SDL_DestroyTexture(m_fpsCounterTexture);
-		m_fpsCounterTexture = nullptr;
-	}
 	if( m_event != nullptr){
 		delete m_event;
 	}
@@ -121,13 +117,12 @@ void Window::updateFPS(){
 		std::cerr << TTF_GetError() << std::endl;
 		return;
 	}
-	if( m_fpsCounterTexture != nullptr){
-		SDL_DestroyTexture(m_fpsCounterTexture);
-		m_fpsCounterTexture = nullptr;
-	}
-	m_fpsCounterTexture = SDL_CreateTextureFromSurface(
-			m_renderer, 
-			fpsCounterText
+	m_fpsCounterTexture = std::shared_ptr<SDL_Texture>(
+			SDL_CreateTextureFromSurface(
+				m_renderer, 
+				fpsCounterText
+				),
+			[](SDL_Texture *ptr){ SDL_DestroyTexture(ptr);}
 			);
 	m_fpsCounter = 0;
 	m_fpsPosition->w = fpsCounterText->w;
@@ -137,7 +132,7 @@ void Window::updateFPS(){
 
 void Window::draw(){
 	SDL_RenderClear(m_renderer);
-	SDL_RenderCopy(m_renderer, m_fpsCounterTexture, nullptr, m_fpsPosition.get());
+	SDL_RenderCopy(m_renderer, m_fpsCounterTexture.get(), nullptr, m_fpsPosition.get());
 
 	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
 	SDL_RenderDrawLine(m_renderer, 0, 393, 1024, 393); 
