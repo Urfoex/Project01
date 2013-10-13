@@ -3,27 +3,21 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-Window::Window() {}
+//void Window::Deleter_TTF_Font(TTF_Font *font){
+	//TTF_CloseFont(font);
+//}
+
+Window::Window() {
+
+}
 
 Window::~Window(){
-	if( m_fpsPosition != nullptr){
-		delete m_fpsPosition;
-		m_fpsPosition = nullptr;
-	}
-	if( m_fpsColor != nullptr){
-		delete m_fpsColor;
-		m_fpsColor = nullptr;
-	}
 	if( m_fpsCounterTexture != nullptr){
 		SDL_DestroyTexture(m_fpsCounterTexture);
 		m_fpsCounterTexture = nullptr;
 	}
 	if( m_event != nullptr){
 		delete m_event;
-	}
-	if( m_font_mono_12 != nullptr){
-		TTF_CloseFont(m_font_mono_12);
-		m_font_mono_12 = nullptr;
 	}
 	if( m_window != nullptr){
 		SDL_DestroyWindow(m_window);
@@ -69,15 +63,36 @@ void Window::init(){
 	if( TTF_Init() != 0){
 		throw std::string(TTF_GetError());
 	}
+                   
+	//auto f = std::make_shared<TTF_Font>( TTF_OpenFont("font/LiberationMono-Regular.ttf", 12), Window::Deleter_TTF_Font);
+	// TODO Create "SavePointer"
+	// Take * pointer
+	// hold it till destructor
+	// delete with delete or custom method
+	//m_font_mono_12 = 
+	//
+	//
+	
+    m_font_mono_12 = std::shared_ptr<TTF_Font>(
+			TTF_OpenFont("font/LiberationMono-Regular.ttf", 12),
+			[](TTF_Font *ptr){ TTF_CloseFont(ptr);}
+			);
 
-	m_font_mono_12 = TTF_OpenFont("font/LiberationMono-Regular.ttf", 12);
+	//m_test = ext::save_ptr<TTF_Font>([](){ 
+			//return TTF_OpenFont("font/LiberationMono-Regular.ttf", 12);
+			//}, [](TTF_Font *ptr){ TTF_CloseFont(ptr);});
 	if( m_font_mono_12 == nullptr){
 		throw std::string(TTF_GetError());
 	}
 
 	m_event = new SDL_Event();
-	m_fpsColor = new SDL_Color{0, 255, 0, 255};
-	m_fpsPosition = new SDL_Rect{4,4,0,0};
+	m_fpsColor = std::make_shared<SDL_Color>();
+	*m_fpsColor = {0, 255, 0, 255};
+
+	m_fpsPosition = std::make_shared<SDL_Rect>();
+	*m_fpsPosition = {4,4,0,0};
+
+	//throw std::string("nothing");
 }
 
 void Window::run(){
@@ -116,7 +131,7 @@ void Window::updateTicks(){
 void Window::updateFPS(){
 	//std::clog << "FPS: " << m_fpsCounter << std::endl;
 	auto fpsCounterText = TTF_RenderText_Solid(
-			m_font_mono_12, 
+			m_font_mono_12.get(), 
 			std::to_string(m_fpsCounter).c_str(), 
 			*m_fpsColor
 			);
@@ -140,7 +155,7 @@ void Window::updateFPS(){
 
 void Window::draw(){
 	SDL_RenderClear(m_renderer);
-	SDL_RenderCopy(m_renderer, m_fpsCounterTexture, nullptr, m_fpsPosition);
+	SDL_RenderCopy(m_renderer, m_fpsCounterTexture, nullptr, m_fpsPosition.get());
 
 	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
 	SDL_RenderDrawLine(m_renderer, 0, 393, 1024, 393); 
