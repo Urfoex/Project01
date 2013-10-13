@@ -8,9 +8,6 @@ Window::Window() {
 }
 
 Window::~Window(){
-	if( m_event != nullptr){
-		delete m_event;
-	}
 	if( m_window != nullptr){
 		SDL_DestroyWindow(m_window);
 		m_window = nullptr;
@@ -65,7 +62,7 @@ void Window::init(){
 		throw std::string(TTF_GetError());
 	}
 
-	m_event = new SDL_Event();
+	m_event = std::make_shared<SDL_Event>();
 	m_fpsColor = std::make_shared<SDL_Color>();
 	*m_fpsColor = {0, 255, 0, 255};
 
@@ -84,7 +81,7 @@ void Window::run(){
 }
 
 void Window::checkEvents(){
-	while(SDL_PollEvent(m_event)){
+	while(SDL_PollEvent(m_event.get())){
 		switch(m_event->type){
 			case SDL_QUIT:
 				{

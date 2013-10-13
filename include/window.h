@@ -21,7 +21,7 @@ class Window{
 		const int m_windowHeight = 768;
 
 		bool m_running = false;
-		union SDL_Event *m_event = nullptr;
+		std::shared_ptr<union SDL_Event> m_event = nullptr;
 
 		uint32_t m_lastTicks = 0;
 		uint32_t m_diffTicks = 0;
