@@ -1,3 +1,4 @@
+#include "game.h"
 #include "extensions.h"
 #include "window.h"
 
@@ -9,6 +10,11 @@ Window::Window() {
 }
 
 Window::~Window(){
+	m_font_mono_12.reset();
+	m_fpsCounterTexture.reset();
+	m_renderer.reset();
+	m_window.reset();
+
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -63,6 +69,9 @@ void Window::init(){
 	m_event = std::make_shared<SDL_Event>();
 	m_fpsColor = ext::make_shared<SDL_Color>({0, 255, 0, 255});
 	m_fpsPosition = ext::make_shared<SDL_Rect>({4,4,0,0});
+
+	m_game = std::make_shared<Game>();
+	m_game->init();
 }
 
 void Window::run(){
@@ -70,6 +79,7 @@ void Window::run(){
 	while(m_running){
 		updateTicks();
 		checkEvents();
+		m_game->update(m_diffTicks);
 		draw();
 
 	}
@@ -124,6 +134,8 @@ void Window::updateFPS(){
 
 void Window::draw(){
 	SDL_RenderClear(m_renderer.get());
+	m_game->draw(m_renderer.get());
+
 	SDL_RenderCopy(m_renderer.get(), m_fpsCounterTexture.get(), nullptr, m_fpsPosition.get());
 
 	SDL_SetRenderDrawColor(m_renderer.get(), 255, 0, 0, 255);

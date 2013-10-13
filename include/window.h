@@ -20,6 +20,8 @@ class Window{
 		const int m_windowWidth = 1024;
 		const int m_windowHeight = 768;
 
+		std::shared_ptr<class Game> m_game = nullptr;
+
 		bool m_running = false;
 		std::shared_ptr<union SDL_Event> m_event = nullptr;
 

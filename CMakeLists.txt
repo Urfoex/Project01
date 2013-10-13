@@ -22,11 +22,16 @@ SET ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -pedantic -g3
 SET( SOURCE_FILES
 	main.cpp
 	source/window.cpp
+	source/simple_block.cpp
+	source/game.cpp
 )
 
 INCLUDE_DIRECTORIES( include)
 SET( HEADER_FILES
 	include/window.h
+	include/entity.h
+	include/simple_block.h
+	include/game.h
 )
 
 ADD_EXECUTABLE(Project01 ${SOURCE_FILES})
