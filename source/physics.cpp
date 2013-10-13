@@ -3,6 +3,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btBox2dShape.h>
+#include <BulletCollision/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.h>
 
 #include <iostream>
 
@@ -11,9 +12,11 @@ void Physics::init(){
 	m_solver = std::make_shared<btSequentialImpulseConstraintSolver>();
 	m_broadphase = std::make_shared<btDbvtBroadphase>();
 	m_configuration = std::make_shared<btDefaultCollisionConfiguration>();
-	m_displatcher = std::make_shared<btCollisionDispatcher>( m_configuration.get());
+	m_dispatcher = std::make_shared<btCollisionDispatcher>( m_configuration.get());
+	m_dispatchBox2DFunc = std::shared_ptr<btCollisionAlgorithmCreateFunc>(new btBox2dBox2dCollisionAlgorithm::CreateFunc());
+	m_dispatcher->registerCollisionCreateFunc(BOX_2D_SHAPE_PROXYTYPE, BOX_2D_SHAPE_PROXYTYPE, m_dispatchBox2DFunc.get());
 	m_world = std::make_shared<btDiscreteDynamicsWorld>(
-			m_displatcher.get(),
+			m_dispatcher.get(),
 			m_broadphase.get(),
 			m_solver.get(),
 			m_configuration.get()
@@ -31,9 +34,10 @@ void Physics::init(){
 	//m_world->addRigidBody(body.get());
 	//m_bodies.push_back(body);
 	btVector3 v3_2{0,1,0};
-	auto shape2 = std::make_shared<btStaticPlaneShape>(v3_2, 1);
+	//auto shape2 = std::make_shared<btStaticPlaneShape>(v3_2, 1);
+	auto shape2 = std::make_shared<btBox2dShape>(btVector3(1,1,0));
                                                               
-	auto motionState = std::make_shared<btDefaultMotionState>(btTransform({0,0,0,1}, {0,-1,0}));
+	auto motionState = std::make_shared<btDefaultMotionState>(btTransform({0,0,0,1}, {16,0,0}));
 	m_motionStates.push_back(motionState);
 	m_shapes.push_back(shape2);
 	btRigidBody::btRigidBodyConstructionInfo info(0, motionState.get(),shape2.get(), {0,0,0} );

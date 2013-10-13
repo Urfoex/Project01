@@ -16,6 +16,8 @@ void SimpleBlock::init(Physics &physics){
 	m_collisionShape->calculateLocalInertia(1, fallIn);
 	btRigidBody::btRigidBodyConstructionInfo info(1, m_motionState.get(), m_collisionShape.get(), fallIn);
 	m_rigidBody = std::make_shared<btRigidBody>(info);
+	m_rigidBody->setLinearFactor({1,1,0});
+	m_rigidBody->setAngularFactor({0,0,1});
 	physics.add(m_rigidBody);
 	//m_world->addRigidBody(m_rigidBody.get());
 	//m_bodies.push_back(body2);
