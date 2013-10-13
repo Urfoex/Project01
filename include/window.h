@@ -14,7 +14,7 @@ class Window{
 
 	protected:
 	private:
-        struct SDL_Window *m_window = nullptr;
+		std::shared_ptr<struct SDL_Window> m_window = nullptr;
 		struct SDL_Renderer *m_renderer = nullptr;
 		const char *m_title = "Project01";
 		const int m_windowWidth = 1024;
