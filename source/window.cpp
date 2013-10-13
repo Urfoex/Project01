@@ -3,10 +3,6 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-//void Window::Deleter_TTF_Font(TTF_Font *font){
-	//TTF_CloseFont(font);
-//}
-
 Window::Window() {
 
 }
@@ -64,23 +60,11 @@ void Window::init(){
 		throw std::string(TTF_GetError());
 	}
                    
-	//auto f = std::make_shared<TTF_Font>( TTF_OpenFont("font/LiberationMono-Regular.ttf", 12), Window::Deleter_TTF_Font);
-	// TODO Create "SavePointer"
-	// Take * pointer
-	// hold it till destructor
-	// delete with delete or custom method
-	//m_font_mono_12 = 
-	//
-	//
-	
     m_font_mono_12 = std::shared_ptr<TTF_Font>(
 			TTF_OpenFont("font/LiberationMono-Regular.ttf", 12),
 			[](TTF_Font *ptr){ TTF_CloseFont(ptr);}
 			);
 
-	//m_test = ext::save_ptr<TTF_Font>([](){ 
-			//return TTF_OpenFont("font/LiberationMono-Regular.ttf", 12);
-			//}, [](TTF_Font *ptr){ TTF_CloseFont(ptr);});
 	if( m_font_mono_12 == nullptr){
 		throw std::string(TTF_GetError());
 	}
@@ -91,8 +75,6 @@ void Window::init(){
 
 	m_fpsPosition = std::make_shared<SDL_Rect>();
 	*m_fpsPosition = {4,4,0,0};
-
-	//throw std::string("nothing");
 }
 
 void Window::run(){
