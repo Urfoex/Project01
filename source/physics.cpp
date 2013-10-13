@@ -46,13 +46,17 @@ void Physics::init(){
 	m_bodies.push_back(body2);
 }
 
+void Physics::add(std::shared_ptr<class btRigidBody> rigidBody){
+	m_world->addRigidBody(rigidBody.get());
+}
+
 void Physics::update(uint32_t lastDuration){
 	// TODO Be sure game always runs 60FPS or higher
 	// -> (lastDuration/1000) < maxTimeStep * 1/60
 	m_world->stepSimulation(lastDuration/1000.0);
 
-	for( auto& body : m_bodies){
-		auto t = body->getWorldTransform();
-		std::clog << t.getOrigin().x() << " " << t.getOrigin().y() << std::endl;
-	}
+	//for( auto& body : m_bodies){
+		//auto t = body->getWorldTransform();
+		//std::clog << t.getOrigin().x() << " " << t.getOrigin().y() << std::endl;
+	//}
 }

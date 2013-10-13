@@ -5,9 +5,13 @@
 void Game::init(){
 	m_physics = std::make_shared<Physics>();
 	m_physics->init();
-	
-	m_entities.push_back(std::make_shared<SimpleBlock>());
+	auto sb = std::make_shared<SimpleBlock>();
+	sb->init(*m_physics);
 
+	m_entities.push_back(sb);
+
+	for( auto &entity : m_entities)
+		entity->init();
 }
 
 void Game::update(uint32_t lastDuration){

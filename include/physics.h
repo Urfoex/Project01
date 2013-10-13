@@ -9,6 +9,7 @@ class Physics {
 	public:
 		void init();
 		void update( uint32_t lastDuration);
+		void add( std::shared_ptr<class btRigidBody> rigidBody);
 	protected:
 	private:
 		std::shared_ptr<class btSequentialImpulseConstraintSolver> m_solver = nullptr;

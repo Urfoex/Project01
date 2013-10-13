@@ -6,6 +6,7 @@
 
 class Entity{
 	public:
+		virtual void init() = 0;
 		virtual void update(uint32_t lastDuration) = 0;
 		virtual void draw(struct SDL_Renderer *renderer) = 0;
 	protected:
