@@ -4,15 +4,9 @@
 #include <iostream>
 
 Window::Window() {
-
 }
 
 Window::~Window(){
-	if( m_renderer != nullptr){
-		SDL_DestroyRenderer(m_renderer);
-		m_renderer = nullptr;
-	}
-
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -24,25 +18,28 @@ void Window::init(){
 
 	m_window = std::shared_ptr<SDL_Window>(
 			SDL_CreateWindow(
-			m_title, 
-			SDL_WINDOWPOS_CENTERED, 
-			SDL_WINDOWPOS_CENTERED, 
-			m_windowWidth, 
-			m_windowHeight, 
-			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
-			),
+				m_title, 
+				SDL_WINDOWPOS_CENTERED, 
+				SDL_WINDOWPOS_CENTERED, 
+				m_windowWidth, 
+				m_windowHeight, 
+				SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
+				),
 			[](SDL_Window *ptr){SDL_DestroyWindow(ptr);}
 			);
 	if( m_window == nullptr){
 		throw std::string(SDL_GetError());
 	}
 
-	m_renderer = SDL_CreateRenderer(
-			m_window.get(), 
-			-1, 
-			SDL_RENDERER_ACCELERATED
-			| SDL_RENDERER_PRESENTVSYNC
-			| SDL_RENDERER_TARGETTEXTURE
+	m_renderer = std::shared_ptr<SDL_Renderer>(
+			SDL_CreateRenderer(
+				m_window.get(), 
+				-1, 
+				SDL_RENDERER_ACCELERATED
+				| SDL_RENDERER_PRESENTVSYNC
+				| SDL_RENDERER_TARGETTEXTURE
+				),
+			[](SDL_Renderer *ptr){ SDL_DestroyRenderer(ptr); }
 			);
 	if( m_renderer == nullptr){
 		throw std::string(SDL_GetError());
@@ -51,8 +48,8 @@ void Window::init(){
 	if( TTF_Init() != 0){
 		throw std::string(TTF_GetError());
 	}
-                   
-    m_font_mono_12 = std::shared_ptr<TTF_Font>(
+
+	m_font_mono_12 = std::shared_ptr<TTF_Font>(
 			TTF_OpenFont("font/LiberationMono-Regular.ttf", 12),
 			[](TTF_Font *ptr){ TTF_CloseFont(ptr);}
 			);
@@ -115,7 +112,7 @@ void Window::updateFPS(){
 	}
 	m_fpsCounterTexture = std::shared_ptr<SDL_Texture>(
 			SDL_CreateTextureFromSurface(
-				m_renderer, 
+				m_renderer.get(), 
 				fpsCounterText
 				),
 			[](SDL_Texture *ptr){ SDL_DestroyTexture(ptr);}
@@ -127,13 +124,13 @@ void Window::updateFPS(){
 }
 
 void Window::draw(){
-	SDL_RenderClear(m_renderer);
-	SDL_RenderCopy(m_renderer, m_fpsCounterTexture.get(), nullptr, m_fpsPosition.get());
+	SDL_RenderClear(m_renderer.get());
+	SDL_RenderCopy(m_renderer.get(), m_fpsCounterTexture.get(), nullptr, m_fpsPosition.get());
 
-	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-	SDL_RenderDrawLine(m_renderer, 0, 393, 1024, 393); 
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-	SDL_RenderPresent(m_renderer);
+	SDL_SetRenderDrawColor(m_renderer.get(), 255, 0, 0, 255);
+	SDL_RenderDrawLine(m_renderer.get(), 0, 393, 1024, 393); 
+	SDL_SetRenderDrawColor(m_renderer.get(), 0, 0, 0, 255);
+	SDL_RenderPresent(m_renderer.get());
 
 	++m_fpsCounter;
 }
