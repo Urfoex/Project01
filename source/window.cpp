@@ -1,4 +1,6 @@
+#include "extensions.h"
 #include "window.h"
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
@@ -59,11 +61,8 @@ void Window::init(){
 	}
 
 	m_event = std::make_shared<SDL_Event>();
-	m_fpsColor = std::make_shared<SDL_Color>();
-	*m_fpsColor = {0, 255, 0, 255};
-
-	m_fpsPosition = std::make_shared<SDL_Rect>();
-	*m_fpsPosition = {4,4,0,0};
+	m_fpsColor = ext::make_shared<SDL_Color>({0, 255, 0, 255});
+	m_fpsPosition = ext::make_shared<SDL_Rect>({4,4,0,0});
 }
 
 void Window::run(){
